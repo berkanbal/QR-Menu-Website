@@ -1,0 +1,85 @@
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #fdf5e6; /* Krem rengi */
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  background-color: #fff8dc;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.navbar h1 {
+  font-size: 1.5rem;
+  color: #333;
+  
+}
+
+.off-screen-menu{
+    background-color:#fff8dc ;
+    height: 100vh;
+    width: 100%;
+    max-width: 300px;
+    position: fixed;
+    top: 60px;
+    left: -300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 3rem;
+    transition: .3s ease;
+}
+
+.off-screen-menu.active{
+    left: 0;
+}
+
+.menu{
+    height: 40px;
+    width: 40px;
+    margin-right: 20px;
+    position: relative;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.menu span{
+    height: 5px;
+    width: 100%;
+    background-color: #333;
+    border-radius: 25px;
+    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50% , -50%);
+    transition: .3s ease;
+}
+
+.menu span:nth-child(1){
+    top: 25%;
+}
+.menu span:nth-child(3){
+    top: 75%;
+}
+
+.menu.active span:nth-child(1){
+    top: 50%;
+    transform: translate(-50%,-50%) rotate(45deg);
+}
+
+.menu.active span:nth-child(2){
+    opacity: 0;
+}
+
+.menu.active span:nth-child(3){
+    top: 40%;
+    transform: translate(-50%,50%) rotate(-45deg);
+}
+
+
