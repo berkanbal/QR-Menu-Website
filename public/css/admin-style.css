@@ -4,6 +4,24 @@ body {
   background-color: #fdf5e6; /* Krem rengi */
 }
 
+/* Tüm focus ve active durumlarında outline kaldır */
+* :focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Özellikle link ve butonlar için */
+a:focus, button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Mobildeki mavi dokunma efekti için */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+
 /* Navbar */
 .navbar {
   display: flex;
@@ -18,21 +36,73 @@ body {
   
 }
 
+/* Hamburger Menu */
 .off-screen-menu{
     background-color:#fff8dc ;
     height: 100vh;
     width: 100%;
-    max-width: 300px;
+    max-width: 240px;
     position: fixed;
     top: 60px;
-    left: -300px;
+    left: -240px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
     font-size: 3rem;
     transition: .3s ease;
+}
+
+.off-screen-menu ul {
+    margin: 0;
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+    margin-top: 20px;
+    }
+
+.off-screen-menu ul li {
+    font-size: 1.5rem;
+    margin: 10px 5px;
+    color: #333;
+    padding: 10px;
+    padding-left: 0;
+    transition: 0.3s ease;
+    text-align: left;
+}
+
+.off-screen-menu ul li:hover{
+    cursor: pointer;
+    
+}
+
+.menu-links {
+    text-decoration: none;
+    font-size: 1.5rem;
+    margin: 10px 0;
+    color: #333;
+    padding: 10px;
+    transition: 0.3s ease;
+}
+
+
+span {
+  position: relative;
+}
+
+span::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #333;
+  transform-origin: center;
+  transform: translate(-50%, 0) scaleX(0);
+  transition: transform 0.3s ease-in-out;
+}
+
+span:hover::before {
+  transform: translate(-50%, 0) scaleX(1);
 }
 
 .off-screen-menu.active{
@@ -46,6 +116,7 @@ body {
     position: relative;
     margin-left: 10px;
     cursor: pointer;
+    
 }
 
 .menu span{
@@ -59,6 +130,7 @@ body {
     left: 50%;
     transform: translate(-50% , -50%);
     transition: .3s ease;
+    
 }
 
 .menu span:nth-child(1){

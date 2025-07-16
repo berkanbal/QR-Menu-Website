@@ -14,6 +14,24 @@ app.use("/urunler", function(req,res){
     res.sendFile(path.join(__dirname,"public/views","users.html"))
 });
 
+app.use("/admin/siparisler", function(req,res){
+    console.log(__dirname);
+    console.log(__filename);
+    res.sendFile(path.join(__dirname,"public/views","admin-siparisler.html"))
+});
+
+app.use("/admin/gunsonu", function(req,res){
+    console.log(__dirname);
+    console.log(__filename);
+    res.sendFile(path.join(__dirname,"public/views","admin-gunsonu.html"))
+});
+
+app.use("/admin/urunayarlari", function(req,res){
+    console.log(__dirname);
+    console.log(__filename);
+    res.sendFile(path.join(__dirname,"public/views","admin-urunayarlari.html"))
+});
+
 app.use("/admin", function(req,res){
     console.log(__dirname);
     console.log(__filename);
