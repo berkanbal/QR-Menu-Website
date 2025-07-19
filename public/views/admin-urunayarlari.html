@@ -6,6 +6,7 @@
     <title>Ürün Ayarları</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="../css/admin-style.css" />
+    <link rel="stylesheet" href="../css/admin-urunayarlari-style.css">
 </head>
 <body>
     <script src="../js/admin.js"></script>
@@ -29,6 +30,84 @@
             <span><li><a href="/admin/gunsonu" class="menu-links">Gün Sonu</a></li></span>
             <span><li><a href="/admin/urunayarlari" class="menu-links">Ürün Ayarları</a></li></span>
         </ul>
+    </div>
+
+    <div class="conteiner">
+        <div class="baslik-kutu"><h1>Ürün Ayarları</h1></div>
+
+        <div class="urunEkle-conteiner">
+        <form id="urunForm" class="urunlerform" enctype="multipart/form-data">
+            <div><input type="text" name="isim" placeholder="Ürün İsmi" required></div>
+            <div><input type="number" name="fiyat" placeholder="Fiyat" step="0.01" required></div>
+            <div><select name="kategori" required>
+            <option value="">Kategori Seç</option>
+            <option value="hamburgerler">Hamburgerler</option>
+            <option value="kizartmalar">Kızartmalar</option>
+            <option value="icecekler">İçecekler</option>
+            </select></div>
+            <div><input type="file" name="resim" accept="image/*" required></div>
+            <div><button type="submit">Urun Ekle</button></div>
+        </form>
+        </div>
+
+        <div>
+
+            <div class="urun-listesi">
+            <h2>Ürün Listesi</h2>
+            <div class="table-container">
+                <table class="urun-tablosu">
+                    <thead>
+                        <tr>
+                            <th class="col-id">ID</th>
+                            <th class="col-isim">Ürün İsmi</th>
+                            <th class="col-fiyat">Fiyat</th>
+                            <th class="col-resim">Resim</th>
+                            <th class="col-kategori">Kategori</th>
+                            <th class="col-islemler">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="col-id">1</td>
+                            <td class="col-isim">Klasik Hamburger</td>
+                            <td class="col-fiyat">45.99 TL</td>
+                            <td class="col-resim"><img src="/Images/SteakBurger-1.png" alt="Klasik Hamburger" class="urun-resmi"></td>
+                            <td class="col-kategori">Hamburgerler</td>
+                            <td class="col-islemler">
+                                <button class="duzenle-btn">Düzenle</button>
+                                <button class="sil-btn">Sil</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-id">2</td>
+                            <td class="col-isim">Patates Kızartması</td>
+                            <td class="col-fiyat">25.50 TL</td>
+                            <td class="col-resim"><img src="/Images/patates.png" alt="Patates Kızartması" class="urun-resmi"></td>
+                            <td class="col-kategori">Kızartmalar</td>
+                            <td class="col-islemler">
+                                <button class="duzenle-btn">Düzenle</button>
+                                <button class="sil-btn">Sil</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-id">3</td>
+                            <td class="col-isim">Kola</td>
+                            <td class="col-fiyat">15.00 TL</td>
+                            <td class="col-resim"><img src="/Images/kola.png" alt="Kola" class="urun-resmi"></td>
+                            <td class="col-kategori">İçecekler</td>
+                            <td class="col-islemler">
+                                <button class="duzenle-btn">Düzenle</button>
+                                <button class="sil-btn">Sil</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>>
+
+        </div>
+
+        
     </div>
 
 </body>

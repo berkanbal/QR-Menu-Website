@@ -1,0 +1,216 @@
+.baslik-kutu{
+    margin-left: 50px;
+    
+}
+
+.baslik-kutu h1 {
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.urunlerform {
+  display: flex;
+  padding: 20px 10px 20px 50px;
+  gap: 20px; /* Inputlar ve buton arası yatay boşluk */
+  align-items: center;
+  flex-wrap: wrap; /* Ekran daralırsa alt satıra geçer */
+  background-color: #ffffff;
+  border-bottom: #ac001d 2px solid;
+  box-shadow: rgba(172, 0, 29, 0.361) 0 2px 5px ;
+}
+
+/* İçteki her div, form elemanlarını sarmalıyor */
+.urunlerform > div {
+  flex: 1; 
+  min-width: 150px; 
+}
+
+/* Input, select, file ve button ayarı */
+input[type="text"],
+input[type="number"],
+input[type="file"],
+select,
+button {
+  width: 100%;
+  box-sizing: border-box; 
+  padding: 12px 15px;
+  font-size: 16px;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+}
+
+/* Buton  stil */
+button {
+  background-color: #ac001d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 150px;
+  transition: background-color 0.3s ease;
+  margin-left: 40px;
+}
+
+/* Focus ve hover  */
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="file"]:focus,
+select:focus {
+  outline: none;
+  border-color: #ac001d;
+  box-shadow: 0 0 5px rgba(136, 0, 11, 0.644);
+}
+
+button:hover {
+  background-color: #910018;
+}
+
+
+/* //////////////////////////////////////// */
+
+.urun-listesi {
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.urun-tablosu {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 10px;
+}
+
+.urun-tablosu th, .urun-tablosu td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+.urun-tablosu th {
+    background-color: #ac001d;
+    color: white;
+    font-weight: bold;
+    padding: 15px;
+}
+
+.urun-tablosu tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Sütun genişlikleri */
+.col-id {
+    width: 5%;
+    padding-left: 20px !important;
+}
+
+.col-isim {
+    width: 20%;
+}
+
+.col-fiyat {
+    width: 10%;
+}
+
+.col-resim {
+    width: 15%;
+}
+
+.col-kategori {
+    width: 15%;
+}
+
+.col-islemler {
+    width: 20%;
+    padding-right: 20px !important;
+}
+
+/* İçerik hizalama */
+.col-id, .col-fiyat {
+    text-align: center;
+}
+
+.col-islemler {
+    text-align: right;
+}
+
+.urun-resmi {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Butonlar */
+.duzenle-btn, .sil-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+    transition: all 0.3s;
+    min-width: 70px;
+}
+
+.duzenle-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.sil-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.duzenle-btn:hover {
+    background-color: #45a049;
+    transform: translateY(-1px);
+}
+
+.sil-btn:hover {
+    background-color: #d32f2f;
+    transform: translateY(-1px);
+}
+
+/* Kategori renklendirme */
+.col-kategori {
+    font-weight: bold;
+}
+
+.col-kategori[data-kategori="Hamburgerler"] {
+    color: #ff5722;
+}
+
+.col-kategori[data-kategori="Kızartmalar"] {
+    color: #8bc34a;
+}
+
+.col-kategori[data-kategori="İçecekler"] {
+    color: #2196f3;
+}
+
+/* Responsive ayarlar */
+@media (max-width: 768px) {
+    .col-islemler {
+        text-align: center;
+        padding-right: 15px !important;
+    }
+    
+    .duzenle-btn, .sil-btn {
+        margin: 5px;
+        display: inline-block;
+    }
+    
+    .col-id {
+        padding-left: 10px !important;
+    }
+}
