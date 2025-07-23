@@ -4,39 +4,20 @@ const app = express();
 const path = require("path");
 app.use(express.static("public"));
 
+app.set("view engine", "ejs");
+app.set("views", "public/views");
+app.get("view engine");
+
+const userRoutes = require("./Routes/user");
+const adminRoutes = require("./Routes/admin");
+
+app.use(adminRoutes);
+app.use(userRoutes);
 
 
 
 
-app.use("/urunler", function(req,res){
-    console.log(__dirname);
-    console.log(__filename);
-    res.sendFile(path.join(__dirname,"public/views","users.html"))
-});
 
-app.use("/admin/siparisler", function(req,res){
-    console.log(__dirname);
-    console.log(__filename);
-    res.sendFile(path.join(__dirname,"public/views","admin-siparisler.html"))
-});
-
-app.use("/admin/gunsonu", function(req,res){
-    console.log(__dirname);
-    console.log(__filename);
-    res.sendFile(path.join(__dirname,"public/views","admin-gunsonu.html"))
-});
-
-app.use("/admin/urunayarlari", function(req,res){
-    console.log(__dirname);
-    console.log(__filename);
-    res.sendFile(path.join(__dirname,"public/views","admin-urunayarlari.html"))
-});
-
-app.use("/admin", function(req,res){
-    console.log(__dirname);
-    console.log(__filename);
-    res.sendFile(path.join(__dirname,"public/views","admin.html"))
-});
 
 app.listen(3000, function(){
     console.log("listening on port 3000");

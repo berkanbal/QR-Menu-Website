@@ -41,12 +41,12 @@
             <div><input type="number" name="fiyat" placeholder="Fiyat" step="0.01" required></div>
             <div><select name="kategori" required>
             <option value="">Kategori Seç</option>
-            <option value="hamburgerler">Hamburgerler</option>
-            <option value="kizartmalar">Kızartmalar</option>
-            <option value="icecekler">İçecekler</option>
+            <% categories.forEach(category => { %>
+             <option value="<%= category.kategoriId %>"><%= category.kategoriAd %></option>
+            <% }) %>
             </select></div>
             <div><input type="file" name="resim" accept="image/*" required></div>
-            <div><button type="submit">Urun Ekle</button></div>
+            <div><button type="submit">Ürün Ekle</button></div>
         </form>
         </div>
 
@@ -67,43 +67,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="col-id">1</td>
-                            <td class="col-isim">Klasik Hamburger</td>
-                            <td class="col-fiyat">45.99 TL</td>
-                            <td class="col-resim"><img src="/Images/SteakBurger-1.png" alt="Klasik Hamburger" class="urun-resmi"></td>
-                            <td class="col-kategori">Hamburgerler</td>
+
+                        <% urunler.forEach(function(urun)  { %>
+                         
+
+                            <tr>
+                            <td class="col-id"><%= urun.urunid %></td>
+                            <td class="col-isim"><%= urun.urunAd %></td>
+                            <td class="col-fiyat"><%= urun.fiyat %> TL</td>
+                            <td class="col-resim"><img src="/Images/<%= urun.resim %>" alt="Klasik Hamburger" class="urun-resmi"></td>
+                            <td class="col-kategori"><%= urun.kategoriAd %></td>
                             <td class="col-islemler">
                                 <button class="duzenle-btn">Düzenle</button>
                                 <button class="sil-btn">Sil</button>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="col-id">2</td>
-                            <td class="col-isim">Patates Kızartması</td>
-                            <td class="col-fiyat">25.50 TL</td>
-                            <td class="col-resim"><img src="/Images/patates.png" alt="Patates Kızartması" class="urun-resmi"></td>
-                            <td class="col-kategori">Kızartmalar</td>
-                            <td class="col-islemler">
-                                <button class="duzenle-btn">Düzenle</button>
-                                <button class="sil-btn">Sil</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="col-id">3</td>
-                            <td class="col-isim">Kola</td>
-                            <td class="col-fiyat">15.00 TL</td>
-                            <td class="col-resim"><img src="/Images/kola.png" alt="Kola" class="urun-resmi"></td>
-                            <td class="col-kategori">İçecekler</td>
-                            <td class="col-islemler">
-                                <button class="duzenle-btn">Düzenle</button>
-                                <button class="sil-btn">Sil</button>
-                            </td>
-                        </tr>
+
+
+                        <% }) %>
+                        
+                        
+                        
                     </tbody>
                 </table>
             </div>
-        </div>>
+        </div>
 
         </div>
 
