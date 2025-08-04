@@ -197,6 +197,40 @@ button:hover {
 .col-kategori[data-kategori="İçecekler"] {
     color: #2196f3;
 }
+/* Silme Uyari Ekrani */
+.modal {
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+}
+.btn-danger {
+  background-color: #e74c3c;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  margin: 5px;
+}
+.btn-secondary {
+  background-color: gray;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  margin: 5px;
+}
+
 
 /* Responsive ayarlar */
 @media (max-width: 768px) {
