@@ -67,6 +67,32 @@ router.delete("/admin/urunayarlari/sil/:id", async function(req, res) {
     }
 });
 
+router.post("/admin/urunayarlari/guncelle/:id", imageUpload.upload.single("resim"), async function(req, res) {
+    const urunId = req.params.id;
+    const { urunAd, fiyat, kategori } = req.body;
+
+    try {
+        if (req.file) {
+            const resim = req.file.filename;
+            await db.execute(
+                "UPDATE urunler SET urunAd = ?, fiyat = ?, kategori = ?, resim = ? WHERE urunid = ?",
+                [urunAd, fiyat, kategori, resim, urunId]
+            );
+        } else {
+            await db.execute(
+                "UPDATE urunler SET urunAd = ?, fiyat = ?, kategori = ? WHERE urunid = ?",
+                [urunAd, fiyat, kategori, urunId]
+            );
+        }
+
+        res.status(200).json({ success: true });
+    } catch (err) {
+        console.error("Güncelleme hatası:", err);
+        res.status(500).json({ success: false, message: "Sunucu hatası" });
+    }
+});
+
+
 
 router.get("/admin", function(req,res){
     res.render("admin");

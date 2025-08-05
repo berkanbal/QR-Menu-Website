@@ -107,6 +107,36 @@
     </div>
     </div>
 
+        <!-- Düzenleme Modalı -->
+    <div id="duzenle-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <h3>Ürünü Düzenle</h3>
+        <form id="duzenleForm" enctype="multipart/form-data">
+        <input type="hidden" name="urunid" id="duzenle-urunid">
+        <div><input type="text" name="urunAd" id="duzenle-urunAd" placeholder="Ürün İsmi" required></div>
+        <div><input type="number" name="fiyat" id="duzenle-fiyat" placeholder="Fiyat" step="0.01" required></div>
+        <div>
+            <select name="kategori" id="duzenle-kategori" required>
+            <option value="-1">Kategori Seç</option>
+            <% categories.forEach(category => { %>
+                <option value="<%= category.kategoriId %>"><%= category.kategoriAd %></option>
+            <% }) %>
+            </select>
+        </div>
+        <div>
+            <label>Yeni Resim (İsteğe Bağlı):</label>
+            <input type="file" name="resim" id="duzenle-resim" accept="image/*">
+        </div>
+        <div class="duzenle-btnlar">
+        <div><button type="submit" class="duzenle-kaydet-btn">Kaydet</button></div>
+        <div><button type="button" id="modal-kapat">Kapat</button></div>
+        </div>
+        </form>
+    </div>
+    </div>
+
+
+
 <script src="../js/admin.js"></script>
 </body>
 </html>

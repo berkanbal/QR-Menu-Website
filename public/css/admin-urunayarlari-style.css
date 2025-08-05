@@ -231,6 +231,24 @@ button:hover {
   margin: 5px;
 }
 
+#duzenleForm > div {
+  margin-bottom: 12px; 
+}
+
+.duzenle-kaydet-btn{
+    background-color: #45a049;
+}
+
+.duzenle-kaydet-btn:hover{
+    background-color: #337736;
+}
+
+.duzenle-btnlar{
+    display: flex;
+    margin-top: 2%;
+    justify-content: center;
+}
+
 
 /* Responsive ayarlar */
 @media (max-width: 768px) {
