@@ -9,7 +9,6 @@
 </head>
 <body>
 
-  <script src="../js/users.js"></script>
 
      <!-- Sepet Ekranı -->
 
@@ -43,49 +42,42 @@
   <div class="menu-section">
     <!-- Hamburgerler -->
     <h2 class="section-title">Hamburgerler</h2>
+    <% hamburgerler.forEach(function(urun) { %>
     <div class="menu-items">
       <div class="menu-item">
-        <img src="Images/cheeseburger.png" alt="Cheeseburger">
-        <p>Cheeseburger</p>
-        <p class="price">120 TL</p>
-      </div>
-      <div class="menu-item">
-        <img src="Images/SteakBurger-1.png" alt="Steak Burger">
-        <p>Steak Burger</p>
-        <p class="price">160 TL</p>
-      </div>
+        <img src="Images/<%= urun.resim %>" alt="Cheeseburger">
+        <p><%= urun.urunAd %></p>
+        <p class="price"><%= urun.fiyat %> TL</p>
+      </div> 
     </div>
+    <% }) %>
 
     <!-- Kızartmalar -->
     <h2 class="section-title">Kızartmalar</h2>
+    <% kizartmalar.forEach(function(urun) { %>
     <div class="menu-items">
       <div class="menu-item">
-        <img src="Images/patates.png" alt="Patates Kızartması">
-        <p>Patates Kızartması</p>
-        <p class="price">50 TL</p>
-      </div>
-      <div class="menu-item">
-        <img src="Images/sogan.png" alt="Soğan Halkası">
-        <p>Soğan Halkası</p>
-        <p class="price">55 TL</p>
+        <img src="Images/<%= urun.resim %>" alt="Patates Kızartması">
+        <p><%= urun.urunAd %></p>
+        <p class="price"><%= urun.fiyat %> TL</p>
       </div>
     </div>
+    <% }) %>
 
     <!-- İçecekler -->
     <h2 class="section-title">İçecekler</h2>
+    <% icecekler.forEach(function(urun) { %>
     <div class="menu-items">
       <div class="menu-item">
-        <img src="Images/kola.png" alt="Kola">
-        <p>Kola</p>
-        <p class="price">30 TL</p>
-      </div>
-      <div class="menu-item">
-        <img src="Images/ice tea.png" alt="Ice Tea">
-        <p>Ice Tea</p>
-        <p class="price">35 TL</p>
+        <img src="Images/<%= urun.resim %>" alt="Kola">
+        <p><%= urun.urunAd %></p>
+        <p class="price"><%= urun.fiyat %> TL</p>
       </div>
     </div>
+    <% }) %>
   </div>
 
+  
+   <script src="../js/users.js"></script>
 </body>
 </html>
