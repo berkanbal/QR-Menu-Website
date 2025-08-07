@@ -9,6 +9,8 @@ app.set("view engine", "ejs");
 app.set("views", "public/views");
 app.get("view engine");
 
+app.use(express.json());
+
 app.use(express.urlencoded({extended: false}));
 
 const userRoutes = require("./Routes/user");

@@ -20,7 +20,8 @@
         </div>
 
         <div class="sepet-icerik-kutusu">
-          <div class="sepet-icerikler">
+
+          <!-- <div class="sepet-icerikler">
             <div class="sepet-urun-resim"><img src="Images/cheeseburger.png" alt=""></div>
             <div class="sepet-urun-bilgiler">
               <div class="sepet-urun-isim"><p>Cheeseburger</p></div>
@@ -33,26 +34,13 @@
                 <div class="sepet-urun-fiyat"><p>450 TL</p></div>
               </div>
             </div>
-          </div>
+          </div> -->
 
-          <div class="sepet-icerikler">
-            <div class="sepet-urun-resim"><img src="Images/kola.png" alt=""></div>
-            <div class="sepet-urun-bilgiler">
-              <div class="sepet-urun-isim"><p>Kola</p></div>
-              <div class="sepet-urun-altbilgi">
-                <div class="sepet-urun-adet">
-                  <button class="urun-adet-buton-eksi">-</button>
-                  <div class="urun-adet-sayi"><p>2 Adet</p></div>
-                  <button class="urun-adet-buton-arti">+</button>
-                </div>
-                <div class="sepet-urun-fiyat"><p>100 TL</p></div>
-              </div>
-            </div>
-          </div>
+          
         </div>
 
         <div class="sepet-onay-kutusu">
-          <div class="sepet-onay-tutar"><p>Toplam Tutar : 550 TL</p></div>
+          <div class="sepet-onay-tutar"><p>Toplam Tutar : 0 TL</p></div>
           <div class="sepet-butonlar">
             <div><button class="sepet-bosalt-buton">Sepeti Boşalt</button></div>
             <div><button class="sepet-siparis-buton">Sipariş Ver</button></div>
@@ -74,39 +62,45 @@
   <div class="menu-section">
     <!-- Hamburgerler -->
     <h2 class="section-title">Hamburgerler</h2>
-    <% hamburgerler.forEach(function(urun) { %>
-    <div class="menu-items">
-      <div class="menu-item">
-        <img src="Images/<%= urun.resim %>" alt="Burger">
-        <p><%= urun.urunAd %></p>
-        <p class="price"><%= urun.fiyat %> TL</p>
-      </div> 
+      <div class="menu-items">
+        <% hamburgerler.forEach(function(urun) { %>
+        <div class="menu-item" data-id="<%= urun.urunid %>">
+          <img src="Images/<%= urun.resim %>" alt="Burger">
+          <p><%= urun.urunAd %></p>
+          <p class="price"><%= urun.fiyat %> TL</p>
+          <button class="sepete-ekle-buton">Sepete Ekle</button>
+        </div> 
+        <% }) %>
     </div>
-    <% }) %>
+    
 
     <!-- Kızartmalar -->
     <h2 class="section-title">Kızartmalar</h2>
-    <% kizartmalar.forEach(function(urun) { %>
     <div class="menu-items">
-      <div class="menu-item">
-        <img src="Images/<%= urun.resim %>" alt="Kızartma">
-        <p><%= urun.urunAd %></p>
-        <p class="price"><%= urun.fiyat %> TL</p>
-      </div>
+        <% kizartmalar.forEach(function(urun) { %>
+        <div class="menu-item" data-id="<%= urun.urunid %>">
+          <img src="Images/<%= urun.resim %>" alt="Kızartma">
+          <p><%= urun.urunAd %></p>
+          <p class="price"><%= urun.fiyat %> TL</p>
+          <button class="sepete-ekle-buton">Sepete Ekle</button>
+        </div>
+        <% }) %>
     </div>
-    <% }) %>
+    
 
     <!-- İçecekler -->
     <h2 class="section-title">İçecekler</h2>
-    <% icecekler.forEach(function(urun) { %>
-    <div class="menu-items">
-      <div class="menu-item">
-        <img src="Images/<%= urun.resim %>" alt="İçecek">
-        <p><%= urun.urunAd %></p>
-        <p class="price"><%= urun.fiyat %> TL</p>
-      </div>
+    <div class="menu-items" >
+        <% icecekler.forEach(function(urun) { %>
+        <div class="menu-item" data-id="<%= urun.urunid %>">
+          <img src="Images/<%= urun.resim %>" alt="İçecek">
+          <p><%= urun.urunAd %></p>
+          <p class="price"><%= urun.fiyat %> TL</p>
+          <button class="sepete-ekle-buton">Sepete Ekle</button>
+        </div>
+        <% }) %>
     </div>
-    <% }) %>
+    
   </div>
 
   
