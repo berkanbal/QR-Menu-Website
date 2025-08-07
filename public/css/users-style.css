@@ -3,7 +3,7 @@ body {
   font-family: 'Roboto', sans-serif;
   background-color: #fdf5e6; /* Krem rengi */
 }
-
+/* SEPET */
 .off-screen-sepet{
   background-color: #fff8dc;
   height: 100vh;
@@ -11,19 +11,151 @@ body {
   max-width: 450px;
   position: fixed;
   top: 0;
-  right: -450px;
+  right: -455px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  font-size: 3rem;
   transition: .3s ease;
+  border-left: 1px solid #33333341 ;
+  box-shadow: -8px 0 12px rgba(0, 0, 0, 0.2);
 
 }
 
 .off-screen-sepet.active{
   right: 0;
+}
+
+.sepet-baslik-kutusu{
+  border-bottom: 2px solid #33333341;
+  display: flex;
+  padding-left: 3%;
+}
+
+.sepet-baslik-kutusu h1{
+  font-size: 1.5rem;
+  line-height: 1.66rem;
+  text-align: left;
+}
+
+.sepet-icerik-kutusu{
+  padding: 0% 3% 4% 3%;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sepet-icerikler{
+  background-color: #fffaf0;
+  margin-top: 4%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  display: flex;
+  padding: 2%;
+}
+
+.sepet-urun-resim{
+  height: 100px;
+  width: 120px;
+  overflow: hidden;
+}
+.sepet-urun-resim img{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 5px;
+  margin: 0 auto;
+}
+
+.sepet-urun-bilgiler{
+  margin-left: 3%;
+  width: 100%;
+  text-align: center;
+}
+
+.sepet-urun-isim{
+  font-size: 1.3rem;
+  line-height: 0.3rem;
+}
+
+.sepet-urun-altbilgi{
+  display: flex;
+  justify-content: center;
+}
+
+.sepet-urun-adet{
+  display: flex;
+  align-items: center;
+  
+}
+
+.urun-adet-sayi  {
+  width: 80px;
+}
+
+.urun-adet-buton-arti,
+.urun-adet-buton-eksi {
+  width: 25px;  /* Buton boyutu */
+  height: 25px;
+  border-radius: 50%;
+  padding: 0.25em 0.8em;
+  border: none;
+  background-color: #ac001d;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.urun-adet-buton-arti:hover,
+.urun-adet-buton-eksi:hover {
+  background-color: #910018;
+}
+
+
+
+.sepet-urun-fiyat{
+  width: 70%;
+}
+
+.sepet-onay-kutusu{
+  border-top: 2px solid #33333341;
+  height: 100px;
+}
+
+.sepet-onay-tutar{
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.sepet-butonlar{
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+
+.sepet-bosalt-buton, .sepet-siparis-buton {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px;
+  transition: all 0.3s;
+  min-width: 70px;
+}
+
+.sepet-bosalt-buton{
+  background-color: #f44336;
+  color: white;
+}
+
+.sepet-siparis-buton{
+  background-color: #4CAF50;
+  color: white;
 }
 
 /* Navbar */

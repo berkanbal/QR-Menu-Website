@@ -14,19 +14,51 @@
 
    <div class="off-screen-sepet">
 
-      <div>
-        <div>
+      
+        <div class = "sepet-baslik-kutusu">
           <h1>SEPET</h1>
         </div>
 
-        <div>
-          <h1>sepet içeriği</h1>
+        <div class="sepet-icerik-kutusu">
+          <div class="sepet-icerikler">
+            <div class="sepet-urun-resim"><img src="Images/cheeseburger.png" alt=""></div>
+            <div class="sepet-urun-bilgiler">
+              <div class="sepet-urun-isim"><p>Cheeseburger</p></div>
+              <div class="sepet-urun-altbilgi">
+                <div class="sepet-urun-adet">
+                  <button class="urun-adet-buton-eksi">-</button>
+                  <div class="urun-adet-sayi"><p>2 Adet</p></div>
+                  <button class="urun-adet-buton-arti">+</button>
+                </div>
+                <div class="sepet-urun-fiyat"><p>450 TL</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sepet-icerikler">
+            <div class="sepet-urun-resim"><img src="Images/kola.png" alt=""></div>
+            <div class="sepet-urun-bilgiler">
+              <div class="sepet-urun-isim"><p>Kola</p></div>
+              <div class="sepet-urun-altbilgi">
+                <div class="sepet-urun-adet">
+                  <button class="urun-adet-buton-eksi">-</button>
+                  <div class="urun-adet-sayi"><p>2 Adet</p></div>
+                  <button class="urun-adet-buton-arti">+</button>
+                </div>
+                <div class="sepet-urun-fiyat"><p>100 TL</p></div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <h1>Onayla</h1>
+        <div class="sepet-onay-kutusu">
+          <div class="sepet-onay-tutar"><p>Toplam Tutar : 550 TL</p></div>
+          <div class="sepet-butonlar">
+            <div><button class="sepet-bosalt-buton">Sepeti Boşalt</button></div>
+            <div><button class="sepet-siparis-buton">Sipariş Ver</button></div>
+          </div>
         </div>
-      </div>
+      
     
    </div>
 
@@ -45,7 +77,7 @@
     <% hamburgerler.forEach(function(urun) { %>
     <div class="menu-items">
       <div class="menu-item">
-        <img src="Images/<%= urun.resim %>" alt="Cheeseburger">
+        <img src="Images/<%= urun.resim %>" alt="Burger">
         <p><%= urun.urunAd %></p>
         <p class="price"><%= urun.fiyat %> TL</p>
       </div> 
@@ -57,7 +89,7 @@
     <% kizartmalar.forEach(function(urun) { %>
     <div class="menu-items">
       <div class="menu-item">
-        <img src="Images/<%= urun.resim %>" alt="Patates Kızartması">
+        <img src="Images/<%= urun.resim %>" alt="Kızartma">
         <p><%= urun.urunAd %></p>
         <p class="price"><%= urun.fiyat %> TL</p>
       </div>
@@ -69,7 +101,7 @@
     <% icecekler.forEach(function(urun) { %>
     <div class="menu-items">
       <div class="menu-item">
-        <img src="Images/<%= urun.resim %>" alt="Kola">
+        <img src="Images/<%= urun.resim %>" alt="İçecek">
         <p><%= urun.urunAd %></p>
         <p class="price"><%= urun.fiyat %> TL</p>
       </div>
