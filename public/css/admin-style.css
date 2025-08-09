@@ -84,11 +84,11 @@ a:focus, button:focus {
 }
 
 
-span {
+.off-screen-menu span {
   position: relative;
 }
 
-span::before {
+.off-screen-menu span::before {
   content: '';
   position: absolute;
   left: 50%;
@@ -101,7 +101,7 @@ span::before {
   transition: transform 0.3s ease-in-out;
 }
 
-span:hover::before {
+.off-screen-menu span:hover::before {
   transform: translate(-50%, 0) scaleX(1);
 }
 

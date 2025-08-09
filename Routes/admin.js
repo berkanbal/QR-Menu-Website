@@ -7,9 +7,93 @@ const imageUpload = require("../helpers/image_upload")
 
 
 
-router.get("/admin/siparisler", function(req,res){
-    res.render("admin-siparisler");
+router.get("/admin/siparisler", async (req, res) => {
+  try {
+    const [rows] = await db.execute(`
+      SELECT 
+        s.siparis_id,
+        s.tarih,
+        s.masa_no,
+        CAST(s.toplam_fiyat AS DECIMAL(10,2)) as toplam_fiyat,
+        s.durum,
+        sd.adet,
+        u.urunAd as urun_ad
+      FROM siparisler s
+      JOIN siparis_detaylari sd ON s.siparis_id = sd.siparis_id
+      JOIN urunler u ON sd.urun_id = u.urunid
+      ORDER BY s.tarih DESC
+    `);
+
+    // Siparişleri grupla
+    const siparisler = rows.reduce((acc, row) => {
+      const existing = acc.find(s => s.siparis_id === row.siparis_id);
+      if (existing) {
+        existing.urunler.push({
+          urun_ad: row.urun_ad,
+          adet: row.adet
+        });
+      } else {
+        acc.push({
+          siparis_id: row.siparis_id,
+          tarih: row.tarih,
+          masa_no: row.masa_no,
+          toplam_fiyat: Number(row.toplam_fiyat),
+          durum: row.durum,
+          urunler: [{
+            urun_ad: row.urun_ad,
+            adet: row.adet
+          }]
+        });
+      }
+      return acc;
+    }, []);
+
+    res.render("admin-siparisler", { siparisler });
+  } catch (err) {
+    console.error("Siparişler alınırken hata:", err);
+    res.status(500).render("hata", { hataMesaji: "Sipariş bilgileri alınamadı" });
+  }
 });
+
+router.post("/admin/siparisler/:id/durum-guncelle", async (req, res) => {
+  try {
+    const siparisId = parseInt(req.params.id);
+    const { durum } = req.body;
+
+    // Geçerli durum kontrolü
+    if (!['bekliyor', 'onaylandi', 'reddedildi', 'tamamlandi'].includes(durum)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Geçersiz durum değeri" 
+      });
+    }
+
+    const [result] = await db.execute(
+      "UPDATE siparisler SET durum = ? WHERE siparis_id = ?",
+      [durum, siparisId]
+    );
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ 
+        success: false, 
+        message: "Sipariş bulunamadı" 
+      });
+    }
+    
+    res.json({ 
+      success: true,
+      newStatus: durum
+    });
+  } catch (err) {
+    console.error("Durum güncelleme hatası:", err);
+    res.status(500).json({ 
+      success: false, 
+      message: "Sunucu hatası" 
+    });
+  }
+});
+
+
 
 router.get("/admin/gunsonu", function(req,res){
     res.render("admin-gunsonu");

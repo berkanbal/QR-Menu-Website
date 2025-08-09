@@ -1,37 +1,34 @@
-const express =  require("express");
+const express = require("express");
 const router = express.Router();
-const path = require("path");
-const db = require("../data/db")
+const db = require("../data/db");
 
+// Ürünleri listeleme
+router.get("/urunler", async function (req, res) {
+  try {
+    const masaNo = req.query.masa;
 
-router.get("/urunler", async function(req,res){
-    try {
-        const masaNo = req.query.masa; // URL'deki masa parametresi alınır
+    const [urunler] = await db.execute("SELECT * FROM urunler");
+    const [hamburgerler] = await db.execute("SELECT * FROM urunler WHERE kategori = '1'");
+    const [kizartmalar] = await db.execute("SELECT * FROM urunler WHERE kategori = '2'");
+    const [icecekler] = await db.execute("SELECT * FROM urunler WHERE kategori = '3'");
 
-        const [urunler] = await db.execute("SELECT *FROM urunler");
-        const [hamburgerler] = await db.execute("SELECT *FROM urunler Where kategori = '1' ");
-        const [kizartmalar] = await db.execute("SELECT *FROM urunler Where kategori = '2' ");
-        const [icecekler] = await db.execute("SELECT *FROM urunler Where kategori = '3' ");
+    res.render("users", {
+      masa: masaNo,
+      urunler,
+      hamburgerler,
+      kizartmalar,
+      icecekler
+    });
 
-        res.render("users",{
-            masa: masaNo,
-            urunler: urunler ,
-            hamburgerler: hamburgerler ,
-            kizartmalar: kizartmalar ,
-            icecekler: icecekler
-        });
-
-    } 
-    
-    catch (err) {
-        console.log(err);
-        res.status(500).send("Sunucu Hatasi");
-    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Sunucu Hatasi");
+  }
 });
 
-// Sipariş gönderme endpoint'i
+// Sipariş gönderme
 router.post("/siparis-gonder", async (req, res) => {
-  const { masa_no, sepet, toplam_fiyat } = req.body;
+  const { masa_no, sepet } = req.body;
 
   if (!masa_no || !sepet || sepet.length === 0) {
     return res.status(400).json({ success: false, message: "Eksik veri gönderildi." });
@@ -41,23 +38,52 @@ router.post("/siparis-gonder", async (req, res) => {
   const durum = "hazırlanıyor";
 
   try {
-    // 1. siparisler tablosuna ekle
-    const [siparisResult] = await db
-      .execute(
-        "INSERT INTO siparisler (masa_no, tarih, toplam_fiyat, durum) VALUES (?, ?, ?, ?)",
-        [masa_no, tarih, toplam_fiyat, durum]
-      );
+    // Gönderilen ürün id'lerini al
+    const urunIdListesi = sepet.map(u => u.urun_id);
+
+    // Ürünlerin fiyatlarını veritabanından çek
+    const [urunler] = await db.execute(
+      `SELECT urunid, fiyat FROM urunler WHERE urunid IN (${urunIdListesi.map(() => '?').join(',')})`,
+      urunIdListesi
+    );
+
+    // ID -> fiyat map
+    const fiyatMap = {};
+    urunler.forEach(u => {
+      fiyatMap[u.urunid] = parseFloat(u.fiyat);
+    });
+
+    // Toplam fiyat ve sipariş detaylarını hazırla
+    let toplamFiyat = 0;
+    const siparisDetaylari = [];
+
+    for (const urun of sepet) {
+      const birimFiyat = fiyatMap[urun.urun_id];
+      if (!birimFiyat) {
+        return res.status(400).json({ success: false, message: `Ürün bulunamadı: ${urun.urun_id}` });
+      }
+      toplamFiyat += birimFiyat * urun.adet;
+      siparisDetaylari.push({
+        urun_id: urun.urun_id,
+        adet: urun.adet,
+        birim_fiyat: birimFiyat
+      });
+    }
+
+    // siparisler tablosuna ekle
+    const [siparisResult] = await db.execute(
+      "INSERT INTO siparisler (masa_no, tarih, toplam_fiyat, durum) VALUES (?, ?, ?, ?)",
+      [masa_no, tarih, toplamFiyat.toFixed(2), durum]
+    );
 
     const siparisId = siparisResult.insertId;
 
-    // 2. Her ürün için siparis_detaylari tablosuna ekle
-    for (const urun of sepet) {
-      const { urun_id, adet, birim_fiyat } = urun;
-      await db
-        .execute(
-          "INSERT INTO siparis_detaylari (siparis_id, urun_id, adet, birim_fiyat) VALUES (?, ?, ?, ?)",
-          [siparisId, urun_id, adet, birim_fiyat]
-        );
+    // siparis_detaylari tablosuna ekle
+    for (const detay of siparisDetaylari) {
+      await db.execute(
+        "INSERT INTO siparis_detaylari (siparis_id, urun_id, adet, birim_fiyat) VALUES (?, ?, ?, ?)",
+        [siparisId, detay.urun_id, detay.adet, detay.birim_fiyat]
+      );
     }
 
     res.json({ success: true, message: "Sipariş başarıyla kaydedildi." });
@@ -67,4 +93,4 @@ router.post("/siparis-gonder", async (req, res) => {
   }
 });
 
-module.exports = router ;
+module.exports = router;

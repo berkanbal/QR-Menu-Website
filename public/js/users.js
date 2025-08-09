@@ -1,25 +1,24 @@
 // Navbar Menu
 document.addEventListener('DOMContentLoaded', () => {
-  const sepet = document.querySelector('.cart-icon');
+  const sepetIcon = document.querySelector('.cart-icon');
   const offScreenSepet = document.querySelector('.off-screen-sepet');
 
-  sepet.addEventListener('click', () => {
-    sepet.classList.toggle('active');
+  sepetIcon.addEventListener('click', () => {
+    sepetIcon.classList.toggle('active');
     offScreenSepet.classList.toggle('active');
+  });
+
+  document.querySelector('.cart-icon').addEventListener('click', function () {
+    document.body.classList.toggle('sepet-acik');
   });
 });
 
-document.querySelector('.cart-icon').addEventListener('click', function() {
-  document.body.classList.toggle('sepet-acik'); // Body'ye class ekle/kaldır
-});
-
-//*****Sepete Ürün Ekleme *****
+//***** Sepete Ürün Ekleme *****
 document.addEventListener("DOMContentLoaded", () => {
   const sepeteEkleButonlari = document.querySelectorAll(".sepete-ekle-buton");
   const sepetIcerikKutusu = document.querySelector(".sepet-icerik-kutusu");
   const toplamTutarGoster = document.querySelector(".sepet-onay-tutar p");
   const sepetBosaltButon = document.querySelector(".sepet-bosalt-buton");
-  const sepetSiparisButon = document.querySelector(".sepet-siparis-buton");
 
   let sepet = [];
 
@@ -27,9 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
   sepeteEkleButonlari.forEach(buton => {
     buton.addEventListener("click", () => {
       const menuItem = buton.closest(".menu-item");
-      const urunId = menuItem.getAttribute("data-id"); // <-- ID buradan
+      const urunId = menuItem.getAttribute("data-id");
       const urunAd = menuItem.querySelector("p").innerText;
-      const fiyat = parseInt(menuItem.querySelector(".price").innerText);
+      const fiyat = parseInt(menuItem.querySelector(".price").innerText); // Sadece görüntü için
       const resim = menuItem.querySelector("img").src;
 
       const varOlanUrun = sepet.find(u => u.id === urunId);
@@ -41,12 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       sepetiGuncelle();
-      console.log("Sepet:", sepet); //SİLİNECEK
     });
   });
 
-
-  // Sepeti güncelle (HTML'i oluştur)
+  // Sepeti güncelle
   function sepetiGuncelle() {
     sepetIcerikKutusu.innerHTML = "";
 
@@ -63,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="urun-adet-sayi"><p>${urun.adet} Adet</p></div>
               <button class="urun-adet-buton-arti" data-index="${index}">+</button>
             </div>
-            <div class="sepet-urun-fiyat"><p>${urun.fiyat * urun.adet} TL</p></div>
+            <div class="sepet-urun-fiyat"><p>${urun.fiyat * urun.adet} ₺</p></div>
           </div>
         </div>
       `;
@@ -90,17 +87,17 @@ document.addEventListener("DOMContentLoaded", () => {
         if (sepet[index].adet > 1) {
           sepet[index].adet--;
         } else {
-          sepet.splice(index, 1); // 1'e düşerse sepetten sil
+          sepet.splice(index, 1);
         }
         sepetiGuncelle();
       });
     });
   }
 
-  // Toplam tutarı hesapla
+  // Toplam tutarı hesapla (sadece ekranda gösterim için)
   function toplamTutarGuncelle() {
     const toplam = sepet.reduce((acc, urun) => acc + (urun.fiyat * urun.adet), 0);
-    toplamTutarGoster.innerText = `Toplam Tutar : ${toplam} TL`;
+    toplamTutarGoster.innerText = `Toplam Tutar : ${toplam} ₺`;
   }
 
   // Sepeti boşalt
@@ -111,27 +108,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Sipariş ver
   // Masa numarasını URL'den al
   const urlParams = new URLSearchParams(window.location.search);
-  const masaNo = urlParams.get("masa");  
+  const masaNo = urlParams.get("masa");
 
-  // Siparişi gönder butonu
+  // Siparişi gönder
   document.querySelector(".sepet-siparis-buton").addEventListener("click", () => {
     if (sepet.length === 0) {
       alert("Sepet boş!");
       return;
     }
 
-    const toplamFiyat = sepet.reduce((acc, urun) => acc + (urun.fiyat * urun.adet), 0);
-
+    // Güvenlik için sadece urun_id ve adet gönderiyoruz
     const siparisVerisi = {
       masa_no: masaNo,
-      toplam_fiyat: toplamFiyat.toFixed(2),
       sepet: sepet.map(item => ({
         urun_id: item.id,
-        adet: item.adet,
-        birim_fiyat: item.fiyat
+        adet: item.adet
       }))
     };
 
@@ -157,6 +150,4 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Bir hata oluştu.");
       });
   });
-
-
 });

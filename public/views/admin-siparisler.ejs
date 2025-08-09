@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Siparisler</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="../css/admin-style.css" />
+    <link rel="stylesheet" href="/css/admin-style.css" />
+    <link rel="stylesheet" href="/css/admin-siparisler-style.css">
 </head>
 <body>
-    <script src="../js/admin.js"></script>
+    
     
     <!-- Navbar -->
     <div class="navbar">
@@ -31,5 +32,82 @@
         </ul>
     </div>
 
+
+    <!-- Sipariş Bölümü -->
+<div class="content">
+    <h2 class="page-title">SİPARİŞLER</h2>
+    <div class="siparis-table-container">
+        <table class="siparis-table">
+        <thead>
+            <tr>
+            <th>Sipariş No</th>
+            <th>Tarih/Saat</th>
+            <th>Masa</th>
+            <th>Ürünler</th>
+            <th>Tutar</th>
+            <th>Durum</th>
+            <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% siparisler.forEach(siparis => { %>
+            <tr data-order-id="<%= siparis.siparis_id %>">
+            <td><%= siparis.siparis_id %></td>
+            <td>
+                <div class="order-time">
+                <span class="order-date"><%= new Date(siparis.tarih).toLocaleDateString('tr-TR') %></span>
+                <span class="order-hour"><%= new Date(siparis.tarih).toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'}) %></span>
+                </div>
+            </td>
+            <td class="text-center"><%= siparis.masa_no %></td>
+            <td>
+                <div class="order-products">
+                <% siparis.urunler.forEach(urun => { %>
+                <div class="product-item">
+                    <span class="product-name"><%= urun.urun_ad %></span>
+                    <span class="product-quantity">x<%= urun.adet %></span>
+                </div>
+                <% }); %>
+                </div>
+            </td>
+            <td class="text-right"><%= siparis.toplam_fiyat.toFixed(2) %> ₺</td>
+            <td>
+                <span class="status-badge status-<%= siparis.durum %>">
+                <%= {
+                    'bekliyor': 'Bekliyor',
+                    'onaylandi': 'Onaylandı',
+                    'reddedildi': 'Reddedildi',
+                    'tamamlandi': 'Tamamlandı'
+                }[siparis.durum] || siparis.durum %>
+                </span>
+            </td>
+            <td class="action-buttons">
+                <% if (siparis.durum === "bekliyor") { %>
+                <button type="button" class="btn btn-sm btn-success btn-action" 
+                        data-action="onaylandi">
+                Onayla
+                </button>
+                <button type="button" class="btn btn-sm btn-danger btn-action" 
+                        data-action="reddedildi">
+                Reddet
+                </button>
+                <% } else if (siparis.durum === "onaylandi") { %>
+                <button type="button" class="btn btn-sm btn-primary btn-action" 
+                        data-action="tamamlandi">
+                Tamamla
+                </button>
+                <% } else { %>
+                <span class="no-action">-</span>
+                <% } %>
+            </td>
+            </tr>
+            <% }); %>
+        </tbody>
+        </table>
+    </div>
+</div>
+
+    <script src="../js/admin.js"></script>
+    <script src="../js/admin-siparisler.js"></script>
 </body>
 </html>
