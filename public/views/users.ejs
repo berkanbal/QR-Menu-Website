@@ -50,13 +50,56 @@
     
    </div>
 
+   <!-- Sepet Bildirim Modal -->
+    <div id="siparisModal" class="modal">
+      <div class="modal-content">
+        <p id="modalMesaj"></p>
+        <button id="modalKapat">Tamam</button>
+      </div>
+    </div>
+
   <!-- Navbar -->
   <div class="navbar">
-    <h1>BURGERCIM</h1>
+    <div><h1>BURGERCIM</h1></div>
+
+    <div class="wifi-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+            <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+            <line x1="12" y1="20" x2="12.01" y2="20"></line>
+        </svg>
+    </div>
+
     <img src="https://cdn-icons-png.flaticon.com/512/34/34568.png" alt="Sepet" class="cart-icon"/>
   </div>
 
-
+<!-- WiFi Modalı -->
+<div id="wifiModal" class="wifi-modal">
+    <div class="wifi-modal-content">
+        <span class="wifi-close-modal">&times;</span>
+        <h2>WiFi Bilgileri</h2>
+        <div class="wifi-info">
+            <div class="wifi-field">
+                <label>WiFi Adı (SSID):</label>
+                <div class="wifi-copy-field">
+                    <input type="text" id="wifiSsid" value="<%= wifi.ssid %>" readonly>
+                    <button class="wifi-copy-btn" data-target="wifiSsid">Kopyala</button>
+                </div>
+            </div>
+            <div class="wifi-field">
+                <label>Şifre:</label>
+                <div class="wifi-copy-field">
+                    <input type="password" id="wifiPassword" value="<%= wifi.password %>" readonly>
+                    <div class="wifi-butons">
+                        <button class="wifi-copy-btn" data-target="wifiPassword">Kopyala</button>
+                        <button id="wifiShowPasswordBtn" class="wifi-show-password">Göster</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
   <!-- Menü -->
   <div class="menu-section">

@@ -1,0 +1,74 @@
+/* İçerik alanı */
+.admin-content {
+    margin-left: 220px; /* Yan menü genişliğine göre ayarla */
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Başlık */
+.admin-content h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Form */
+.admin-form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Form Grupları */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #444;
+}
+
+.form-group input {
+    width: 80%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #ac001d;
+    outline: none;
+}
+
+/* Buton */
+.btn {
+    background: #ac001d;
+    color: #fff;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background: #7e0015;
+}
+
+/* Alert Mesajları */
+.alert {
+    background: #e0f7e9;
+    color: #2e7d32;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}

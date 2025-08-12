@@ -53,8 +53,58 @@ router.get("/admin/logout", (req, res) => {
 });
 
 
-router.get("/admin", adminAuth, function(req,res){
-    res.render("admin", { admin: req.session.admin });
+
+// Admin paneli ana sayfa (Wi-Fi dahil)
+router.get("/admin", adminAuth, async function (req, res) {
+  try {
+    const [wifiRows] = await db.execute('SELECT * FROM wifi_settings ORDER BY id DESC LIMIT 1');
+    const wifi = wifiRows[0] || { ssid: '', password: '' };
+
+    // Diğer verileri de çekin (siparişler vs.)
+    res.render("admin", { 
+      admin: req.session.admin,
+      wifi: wifi,
+      message: null
+      // diğer veriler...
+    });
+  } catch (err) {
+    console.error(err);
+    res.render("admin", { 
+      admin: req.session.admin,
+      wifi: { ssid: '', password: '' },
+      message: 'Veri alınırken hata oluştu'
+    });
+  }
+});
+
+// Admin WiFi güncelleme
+router.post('/admin/wifi', adminAuth, async (req, res) => {
+  const { ssid, password } = req.body;
+  try {
+    // Veritabanı işlemleri aynı
+    const [rows] = await db.execute('SELECT COUNT(*) as cnt FROM wifi_settings');
+    if (rows[0].cnt > 0) {
+      await db.execute('UPDATE wifi_settings SET ssid = ?, password = ? ORDER BY id DESC LIMIT 1', [ssid, password]);
+    } else {
+      await db.execute('INSERT INTO wifi_settings (ssid, password) VALUES (?, ?)', [ssid, password]);
+    }
+
+    // Burada ÖNEMLİ DEĞİŞİKLİK: admin template'ine yönlendir
+    const [newRows] = await db.execute('SELECT * FROM wifi_settings ORDER BY id DESC LIMIT 1');
+    res.render('admin', { 
+      admin: req.session.admin,
+      wifi: newRows[0], 
+      message: 'WiFi bilgisi kaydedildi.'
+    });
+    
+  } catch (err) {
+    console.error(err);
+    res.render('admin', { 
+      admin: req.session.admin,
+      wifi: { ssid, password }, 
+      message: 'Kaydetme sırasında hata oluştu.'
+    });
+  }
 });
 
 //ADMIN SIPARISLER

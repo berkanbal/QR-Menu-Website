@@ -11,18 +11,27 @@ router.get("/urunler", async function (req, res) {
     const [hamburgerler] = await db.execute("SELECT * FROM urunler WHERE kategori = '1'");
     const [kizartmalar] = await db.execute("SELECT * FROM urunler WHERE kategori = '2'");
     const [icecekler] = await db.execute("SELECT * FROM urunler WHERE kategori = '3'");
+    const [wifiRows] = await db.execute("SELECT ssid, password FROM wifi_settings ORDER BY id DESC LIMIT 1");
+
+      const wifi = wifiRows[0] ? {
+      ssid: wifiRows[0].ssid,
+      password: wifiRows[0].password
+    } : { ssid: '', password: '' };
 
     res.render("users", {
       masa: masaNo,
       urunler,
       hamburgerler,
       kizartmalar,
-      icecekler
+      icecekler,
+      wifi: wifi 
     });
 
   } catch (err) {
     console.log(err);
-    res.status(500).send("Sunucu Hatasi");
+    res.status(500).render("users", {
+      wifi: { ssid: '', password: '' },
+    });
   }
 });
 

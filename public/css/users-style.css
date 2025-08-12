@@ -170,13 +170,49 @@ body.sepet-acik {
 }
 
 
+/* Siparis Bildirim Modal */
+.modal {
+  display: none; /* Başta kapalı */
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  max-width: 300px;
+  margin: 15% auto;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.modal-content button {
+  background: #ac001d;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.modal-content button:hover {
+  background: #7f0015;
+}
+
+
 /* Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #fff8dc;
-  padding: 15px 20px;
+  padding: 5px 20px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
@@ -197,6 +233,148 @@ body.sepet-acik {
   transform: scale(1.2) rotate(20deg);
   transition: transform 0.3s ease;
 }
+
+/* WiFi İkonu */
+.wifi-icon {
+    cursor: pointer;
+    padding: 10px;
+    margin-left: auto;
+}
+
+.wifi-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* WiFi Modalı */
+.wifi-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.wifi-modal-content {
+    background-color: #f8f8f8;
+    margin: 10% auto;
+    padding: 25px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    border: 2px solid #ac001d;
+}
+
+.wifi-close-modal {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    color: #ac001d;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.wifi-close-modal:hover {
+    color: #7a0014;
+}
+
+.wifi-modal-content h2 {
+    color: #ac001d;
+    margin-top: 0;
+    text-align: center;
+    font-size: 24px;
+}
+
+.wifi-info {
+    margin: 25px 0;
+}
+
+.wifi-field {
+    margin-bottom: 20px;
+}
+
+.wifi-field label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.wifi-copy-field {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.wifi-copy-field input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    font-size: 16px;
+    width: 80%;
+}
+
+.wifi-copy-btn, .wifi-show-password, .wifi-close-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.wifi-copy-btn, .wifi-show-password {
+    background-color: #ac001d;
+    color: white;
+}
+
+.wifi-copy-btn:hover, .wifi-show-password:hover {
+    background-color: #7a0014;
+}
+
+.wifi-show-password {
+    min-width: 80px;
+}
+
+@media (max-width: 768px) {
+  
+  
+  .wifi-modal-content {
+    width: 80%;
+    margin: 20% auto;
+    padding: 15px;
+  }
+  
+  .wifi-field {
+    margin-bottom: 15px;
+  }
+  
+  .wifi-copy-field {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .wifi-copy-field input {
+    width: 90%;
+  }
+  
+  .wifi-copy-btn,
+  .wifi-show-password {
+    width: 50%;
+  }
+
+  .wifi-butons {
+    display: flex;
+    gap: 20px;
+  }
+}
+
 
 /* MENU */
 .menu-section {

@@ -13,6 +13,157 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+//Wifi Modal İşlemleri
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        const wifiIcon = document.querySelector('.wifi-icon');
+        const wifiModal = document.getElementById('wifiModal');
+        const wifiCloseModal = document.querySelector('.wifi-close-modal');
+        const wifiPasswordInput = document.getElementById('wifiPassword');
+        const wifiShowPasswordBtn = document.getElementById('wifiShowPasswordBtn');
+
+        if(wifiIcon) {
+            wifiIcon.addEventListener('click', () => {
+                if(wifiModal) wifiModal.style.display = 'block';
+            });
+        }
+
+        // Modal kapatma fonksiyonu - butonları aktif hale getir
+        function closeModal() {
+            if(wifiModal) wifiModal.style.display = 'none';
+
+            document.querySelectorAll('.wifi-copy-btn').forEach(btn => {
+                btn.textContent = btn.getAttribute('data-original-text') || 'Kopyala';
+                btn.style.backgroundColor = '#ac001d';
+                btn.disabled = false;
+            });
+
+            if(wifiShowPasswordBtn) {
+                wifiShowPasswordBtn.textContent = (wifiPasswordInput.type === 'password') ? 'Göster' : 'Gizle';
+                wifiShowPasswordBtn.disabled = false;
+            }
+
+            if (wifiPasswordInput) {
+                wifiPasswordInput.type = 'password';
+            }
+        }
+
+        if(wifiCloseModal) {
+            wifiCloseModal.addEventListener('click', closeModal);
+        }
+
+        window.addEventListener('click', (e) => {
+            if (e.target === wifiModal) {
+                closeModal();
+            }
+        });
+
+        // Orijinal buton metnini sakla
+        document.querySelectorAll('.wifi-copy-btn').forEach(btn => {
+            if (!btn.getAttribute('data-original-text')) {
+                btn.setAttribute('data-original-text', btn.textContent);
+            }
+        });
+
+        function copyText(text) {
+          if (navigator.clipboard) {
+            return navigator.clipboard.writeText(text);
+          } else {
+            // Fallback yöntem
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';  // sayfayı kaydırmaz
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+
+            return new Promise((resolve, reject) => {
+              try {
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textarea);
+                if (successful) resolve();
+                else reject();
+              } catch (err) {
+                document.body.removeChild(textarea);
+                reject(err);
+              }
+            });
+          }
+        }
+
+
+       document.addEventListener('click', function(e) {
+        if(e.target.classList.contains('wifi-copy-btn')) {
+          const btn = e.target;
+          const targetId = btn.getAttribute('data-target');
+          const input = document.getElementById(targetId);
+
+          if(input) {
+            copyText(input.value).then(() => {
+              const originalText = btn.textContent;
+              btn.textContent = 'Kopyalandı';
+              btn.style.backgroundColor = '#4CAF50';
+              btn.disabled = true;
+              btn.style.cursor = 'default';
+
+              // Modal kapandığında reset işlemleri buraya
+              const wifiModal = document.getElementById('wifiModal');
+
+              function resetBtn() {
+                btn.textContent = originalText;
+                btn.style.backgroundColor = '#ac001d';
+                btn.disabled = false;
+                btn.style.cursor = 'pointer';
+
+                wifiModal.removeEventListener('click', modalClickHandler);
+                document.querySelector('.wifi-close-modal').removeEventListener('click', resetBtn);
+              }
+
+              function modalClickHandler(event) {
+                if(event.target === wifiModal) {
+                  resetBtn();
+                }
+              }
+
+              document.querySelector('.wifi-close-modal').addEventListener('click', resetBtn);
+              wifiModal.addEventListener('click', modalClickHandler);
+
+            }).catch(err => {
+              console.error('Kopyalama hatası:', err);
+            });
+          }
+        }
+      });
+
+        if (wifiShowPasswordBtn && wifiPasswordInput) {
+            wifiShowPasswordBtn.addEventListener('click', () => {
+                if (wifiPasswordInput.type === 'password') {
+                    wifiPasswordInput.type = 'text';
+                    wifiShowPasswordBtn.textContent = 'Gizle';
+                } else {
+                    wifiPasswordInput.type = 'password';
+                    wifiShowPasswordBtn.textContent = 'Göster';
+                }
+            });
+        }
+
+    } catch (error) {
+        console.error('WiFi modal işlemlerinde hata:', error);
+    }
+});
+
+// Modal gösterme fonksiyonu
+function modalGoster(mesaj) {
+  document.getElementById("modalMesaj").innerText = mesaj;
+  document.getElementById("siparisModal").style.display = "block";
+}
+
+// Modal kapatma fonksiyonu
+document.getElementById("modalKapat").addEventListener("click", function() {
+  document.getElementById("siparisModal").style.display = "none";
+});
+
 //***** Sepete Ürün Ekleme *****
 document.addEventListener("DOMContentLoaded", () => {
   const sepeteEkleButonlari = document.querySelectorAll(".sepete-ekle-buton");
@@ -138,16 +289,16 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          alert("Sipariş başarıyla gönderildi!");
+          modalGoster("Sipariş başarıyla gönderildi!");
           sepet = [];
           sepetiGuncelle();
         } else {
-          alert("Sipariş gönderilemedi: " + data.message);
+          modalGoster("Sipariş gönderilemedi: " + data.message);
         }
       })
       .catch(err => {
         console.error("İstek hatası:", err);
-        alert("Bir hata oluştu.");
+        modalGoster("Bir hata oluştu.");
       });
   });
 });
