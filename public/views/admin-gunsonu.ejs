@@ -6,9 +6,10 @@
     <title>Gün Sonu</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="../css/admin-style.css" />
+    <link rel="stylesheet" href="../css/admin-gunsonu-style.css">
 </head>
 <body>
-    <script src="../js/admin.js"></script>
+    
     
     <!-- Navbar -->
     <div class="navbar">
@@ -31,5 +32,111 @@
         </ul>
     </div>
 
+
+    <div class="icerik">
+        <h2 class="sayfa-baslik">GÜN SONU RAPORU</h2>
+
+<!-- Sipariş Listesi -->
+        <div class="siparis-tablosu-alani">
+            <table class="siparis-tablosu">
+                <thead>
+                    <tr>
+                        <th>Sipariş No</th>
+                        <th>Tarih/Saat</th>
+                        <th>Masa</th>
+                        <th>Ürünler</th>
+                        <th>Tutar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (siparisler.length === 0) { %>
+                        <tr>
+                            <td colspan="5" class="orta">Onaylanmış sipariş bulunamadı.</td>
+                        </tr>
+                    <% } else { %>
+                        <% siparisler.forEach(siparis => { %>
+                            <tr>
+                                <td><%= siparis.siparis_id %></td>
+                                <td>
+                                    <div class="siparis-zamani">
+                                        <span class="siparis-tarihi"><%= new Date(siparis.tarih).toLocaleDateString('tr-TR') %></span>
+                                        <span class="siparis-saati"><%= new Date(siparis.tarih).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) %></span>
+                                    </div>
+                                </td>
+                                <td class="ortala"><%= siparis.masa_no %></td>
+                                <td>
+                                    <div class="siparis-urunleri">
+                                        <% siparis.urunler.forEach(urun => { %>
+                                            <div class="urun-satiri">
+                                                <span class="urun-adi"><%= urun.urun_adi %></span>
+                                                <span class="urun-adet">x<%= urun.adet %></span>
+                                            </div>
+                                        <% }); %>
+                                    </div>
+                                </td>
+                                <td class="saga-ortala"><%= siparis.toplam_fiyat ? Number(siparis.toplam_fiyat).toFixed(2) : "0.00" %> ₺</td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                </tbody>
+                <tfoot>
+                    <tr class="toplam-satir">
+                        <td colspan="4" class="saga-ortala"><strong>Toplam Sipariş Sayısı:</strong> <%= toplamSiparisSayisi %></td>
+                        <td><strong><%= toplamFiyat.toFixed(2) %> ₺</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Ürün Toplamları -->
+        <div class="siparis-tablosu-alani">
+            <table class="siparis-tablosu urun-tablosu">
+                <thead>
+                    <tr>
+                        <th class="urun-adi">Ürün</th>
+                        <th class="urun-adet">Adet</th>
+                        <th class="urun-tutar">Toplam Tutar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (urunToplamlari.length === 0) { %>
+                        <tr><td colspan="3" class="orta">Ürün bulunamadı.</td></tr>
+                    <% } else { %>
+                        <% urunToplamlari.forEach(u => { %>
+                            <tr>
+                                <td class="urun-adi"><%= u.urun_adi %></td>
+                                <td class="urun-adet"><%= u.toplam_adet %></td>
+                                <td class="urun-tutar"><%= u.toplam_tutar.toFixed(2) %> ₺</td>
+                            </tr>
+                        <% }); %>
+                    <% } %>
+                </tbody>
+                <tfoot>
+                    <tr class="toplam-satir">
+                        <td class="urun-adi"><strong>GENEL TOPLAM</strong></td>
+                        <td class="urun-adet"><strong><%= genelToplamAdet %></strong></td>
+                        <td class="urun-tutar"><strong><%= genelToplamTutar.toFixed(2) %> ₺</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Günü Bitir Butonu -->
+        <button id="gunuBitirBtn" class="buton buton-kirmizi" style="float:right; margin-top:20px;">Günü Bitir</button>
+
+       <!-- Modal -->
+        <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <p>Günü bitirmek istediğinize emin misiniz?</p>
+            <button id="modalYes" class="modal-button-yes">Evet</button>
+            <button id="modalNo" class="modal-button-no">Hayır</button>
+        </div>
+        </div>
+
+
+    </div>
+
+<script src="../js/admin.js"></script>
+<script src="../js/admin-gunsonu.js"></script>
 </body>
 </html>

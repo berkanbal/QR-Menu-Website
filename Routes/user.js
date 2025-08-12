@@ -35,7 +35,7 @@ router.post("/siparis-gonder", async (req, res) => {
   }
 
   const tarih = new Date();
-  const durum = "hazırlanıyor";
+  const durum = "bekliyor";
 
   try {
     // Gönderilen ürün id'lerini al

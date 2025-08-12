@@ -1,0 +1,212 @@
+.icerik {
+    padding: 2%;
+    margin: 0 auto;
+}
+
+.sayfa-baslik {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    font-size: 1.8rem;
+}
+
+/* TABLO STİLLERİ */
+.siparis-tablosu {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.9em;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.siparis-tablosu thead tr {
+    background-color: #ac001d;
+    color: #ffffff;
+}
+
+.siparis-tablosu th,
+.siparis-tablosu td {
+    padding: 12px 15px;
+    border: 1px solid #dddddd;
+}
+
+.siparis-tablosu tbody tr {
+    border-bottom: 1px solid #dddddd;
+    background-color: #f7f7f78e;
+}
+
+.siparis-tablosu tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.siparis-tablosu tbody tr:last-of-type {
+    border-bottom: 2px solid #57000e;
+}
+
+.siparis-tablosu tbody tr:hover {
+    background-color: #ffe2ab;
+}
+
+/* ÜRÜN TABLOSU ÖZEL STİLLERİ */
+.urun-tablosu td.urun-adet, 
+.urun-tablosu td.urun-tutar,
+.urun-tablosu th.urun-adet,
+.urun-tablosu th.urun-tutar {
+    text-align: right;
+    padding-right: 25px;
+}
+
+.urun-tablosu td.urun-adi,
+.urun-tablosu th.urun-adi {
+    text-align: left;
+}
+
+/* GENEL STİLLER */
+.toplam-satir {
+    background-color: #eee;
+    font-weight: bold;
+}
+
+.ortala {
+    text-align: center;
+}
+
+.saga-ortala {
+    text-align: right;
+}
+
+.siparis-zamani {
+    display: flex;
+    flex-direction: column;
+}
+
+.siparis-urunleri {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.urun-satiri {
+    display: flex;
+    justify-content: space-between;
+}
+
+.buton {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 1%;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.buton-kirmizi {
+    background-color: #f44336;
+    color: white;
+}
+
+.buton-kirmizi:hover {
+    background-color: #da190b;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Responsive Tasarım */
+@media (max-width: 768px) {
+    .siparis-tablosu {
+        font-size: 0.8em;
+    }
+    
+    .siparis-tablosu th,
+    .siparis-tablosu td {
+        padding: 8px 10px;
+    }
+    
+    .sayfa-baslik {
+        font-size: 22px;
+    }
+}
+
+/* Modal Arka Plan */
+.modal {
+  display: none ; /* Başlangıçta gizli */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  /* Flexbox ile ortala */
+  display: flex;
+}
+
+/* Modal arka plan */
+.modal {
+  display: none; /* Başlangıçta gizli */
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal görünürken class eklendiğinde */
+.modal.active {
+  display: flex;
+}
+
+/* Modal içeriği kutusu */
+.modal-content {
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 10px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  color: #333;
+}
+
+/* Buton genel stilleri */
+.modal-content button {
+  min-width: 100px;
+  padding: 10px 0;
+  margin: 10px 15px 0 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+/* Evet butonu (yeşil tonları) */
+.modal-button-yes {
+  background-color: #28a745;
+  color: white;
+}
+.modal-button-yes:hover {
+  background-color: #218838;
+}
+
+/* Hayır butonu (kırmızı tonları) */
+.modal-button-no {
+  background-color: #dc3545;
+  color: white;
+}
+.modal-button-no:hover {
+  background-color: #c82333;
+}

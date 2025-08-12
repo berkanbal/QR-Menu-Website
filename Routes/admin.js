@@ -1,13 +1,64 @@
 const express = require("express");
+const app = express();
 const router = express.Router();
 const path = require("path");
 const db = require("../data/db")
 const imageUpload = require("../helpers/image_upload")
+const ExcelJS = require('exceljs');
+const { createGunsonuReportExcel } = require('../helpers/excel-helper');
+const bcrypt = require("bcrypt");
+const adminAuth = require("../middlewares/admin-auth");
 
 
 
+// Login formu
+router.get("/admin/login", (req, res) => {
+    res.render("admin-login");
+});
 
-router.get("/admin/siparisler", async (req, res) => {
+// Login işlemi
+router.post("/admin/login", async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        const [rows] = await db.execute(
+            "SELECT * FROM adminler WHERE kullanici_adi = ?",
+            [username]
+        );
+
+        if (rows.length === 0) {
+            return res.render("admin-login", { error: "Kullanıcı bulunamadı" });
+        }
+
+        const admin = rows[0];
+
+        const match = await bcrypt.compare(password, admin.sifre_hash);
+        if (!match) {
+            return res.render("admin-login", { error: "Şifre hatalı" });
+        }
+
+        req.session.admin = { id: admin.id, kullanici_adi: admin.kullanici_adi };
+        res.redirect("/admin");
+    } catch (err) {
+        console.error(err);
+        res.render("admin-login", { error: "Sunucu hatası" });
+    }
+});
+
+// Logout işlemi
+router.get("/admin/logout", (req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/admin/login");
+    });
+});
+
+
+router.get("/admin", adminAuth, function(req,res){
+    res.render("admin", { admin: req.session.admin });
+});
+
+//ADMIN SIPARISLER
+router.get("/admin/siparisler", adminAuth, async (req, res) => {
   try {
     const [rows] = await db.execute(`
       SELECT 
@@ -55,7 +106,7 @@ router.get("/admin/siparisler", async (req, res) => {
   }
 });
 
-router.post("/admin/siparisler/:id/durum-guncelle", async (req, res) => {
+router.post("/admin/siparisler/:id/durum-guncelle", adminAuth, async (req, res) => {
   try {
     const siparisId = parseInt(req.params.id);
     const { durum } = req.body;
@@ -93,13 +144,167 @@ router.post("/admin/siparisler/:id/durum-guncelle", async (req, res) => {
   }
 });
 
+// ADMIN-GUNSONU
+router.get("/admin/gunsonu", adminAuth, async (req, res) => {
+  try {
+    // Tamamlanmış siparişleri çek
+    const [siparislerRows] = await db.query(`
+      SELECT siparis_id, masa_no, tarih, toplam_fiyat
+      FROM siparisler
+      WHERE durum = 'tamamlandi'
+      ORDER BY tarih DESC
+    `);
+
+    // Eğer sipariş yoksa direkt render yap
+    if (siparislerRows.length === 0) {
+      return res.render("admin-gunsonu", {
+        siparisler: [],
+        toplamSiparisSayisi: 0,
+        toplamFiyat: 0,
+        urunToplamlari: [],
+        genelToplamAdet: 0,
+        genelToplamTutar: 0,
+      });
+    }
+
+    // Sipariş idlerini al (detayları çekmek için)
+    const siparisIdler = siparislerRows.map(s => s.siparis_id);
+
+    // Sipariş detayları ve ürün bilgilerini çek
+    const [detaylarRows] = await db.query(`
+      SELECT sd.siparis_id, u.urunAd AS urun_adi, sd.adet, sd.birim_fiyat
+      FROM siparis_detaylari sd
+      JOIN urunler u ON sd.urun_id = u.urunid
+      WHERE sd.siparis_id IN (?)
+    `, [siparisIdler]);
+
+    // Siparişlerin içine ürünleri ekle
+    const siparisMap = {};
+    siparislerRows.forEach(siparis => {
+      siparis.urunler = [];
+      siparisMap[siparis.siparis_id] = siparis;
+    });
+    detaylarRows.forEach(d => {
+      if (siparisMap[d.siparis_id]) {
+        siparisMap[d.siparis_id].urunler.push({
+          urun_adi: d.urun_adi,
+          adet: d.adet,
+          birim_fiyat: d.birim_fiyat,
+          toplam_tutar: d.adet * d.birim_fiyat,
+        });
+      }
+    });
+
+    // Ürün bazında toplam adet ve tutarları hesapla
+    const urunToplamMap = {};
+    detaylarRows.forEach(d => {
+      if (!urunToplamMap[d.urun_adi]) {
+        urunToplamMap[d.urun_adi] = { toplam_adet: 0, toplam_tutar: 0 };
+      }
+      urunToplamMap[d.urun_adi].toplam_adet += d.adet;
+      urunToplamMap[d.urun_adi].toplam_tutar += d.adet * d.birim_fiyat;
+    });
+    const urunToplamlari = Object.entries(urunToplamMap).map(([urun_adi, val]) => ({
+      urun_adi,
+      toplam_adet: val.toplam_adet,
+      toplam_tutar: val.toplam_tutar,
+    }));
+
+    // Genel toplamlar
+    const toplamSiparisSayisi = siparislerRows.length;
+    const toplamFiyat = siparislerRows.reduce((sum, s) => sum + Number(s.toplam_fiyat), 0);
+    const genelToplamAdet = urunToplamlari.reduce((sum, u) => sum + u.toplam_adet, 0);
+    const genelToplamTutar = urunToplamlari.reduce((sum, u) => sum + u.toplam_tutar, 0);
+
+    // Render et
+    res.render("admin-gunsonu", {
+      siparisler: siparislerRows,
+      toplamSiparisSayisi,
+      toplamFiyat,
+      urunToplamlari,
+      genelToplamAdet,
+      genelToplamTutar,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Sunucu hatası");
+  }
+});
+
+router.get('/admin/gunsonu/excel', adminAuth, async (req, res) => {
+  try {
+    const [siparislerRows] = await db.query(`
+      SELECT siparis_id, masa_no, tarih, toplam_fiyat
+      FROM siparisler
+      WHERE durum = 'tamamlandi'
+      ORDER BY tarih DESC
+    `);
+
+    if (siparislerRows.length === 0) {
+      return res.status(404).send("Tamamlanmış sipariş bulunamadı.");
+    }
+
+    const siparisIdler = siparislerRows.map(s => s.siparis_id);
+
+    const [detaylarRows] = await db.query(`
+      SELECT sd.siparis_id, u.urunAd AS urun_adi, sd.adet, sd.birim_fiyat
+      FROM siparis_detaylari sd
+      JOIN urunler u ON sd.urun_id = u.urunid
+      WHERE sd.siparis_id IN (?)
+    `, [siparisIdler]);
+
+    const workbook = await createGunsonuReportExcel(siparislerRows, detaylarRows);
+
+    // Tarih formatı
+    const tarih = new Date();
+    const gun = tarih.getDate().toString().padStart(2, '0');
+    const ay = (tarih.getMonth() + 1).toString().padStart(2, '0');
+    const yil = tarih.getFullYear();
+    const dosyaAdi = `Burgercim-Gunsonu-${gun}.${ay}.${yil}.xlsx`;
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename="${dosyaAdi}"`);
+
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Excel dosyası oluşturulurken hata oluştu.");
+  }
+});
+
+router.delete('/admin/gunsonu/siparisleri-sil', adminAuth, async (req, res) => {
+  try {
+    // Tüm sipariş ID'lerini al
+    const [siparisler] = await db.query("SELECT siparis_id FROM siparisler");
+
+    if (siparisler.length === 0) {
+      return res.status(200).json({ message: 'Silinecek sipariş yok' });
+    }
+
+    const siparisIdler = siparisler.map(s => s.siparis_id);
+
+    // Sipariş detaylarını sil
+    await db.query("DELETE FROM siparis_detaylari WHERE siparis_id IN (?)", [siparisIdler]);
+
+    // Ardından siparişleri sil
+    await db.query("DELETE FROM siparisler");
+
+    res.status(200).json({ message: 'Tüm siparişler başarıyla silindi' });
+  } catch (error) {
+    console.error("Sipariş silme hatası:", error);
+    res.status(500).json({ error: "Sipariş silme sırasında hata oluştu" });
+  }
+});
 
 
-router.get("/admin/gunsonu", function(req,res){
+
+router.get("/admin/gunsonu", adminAuth, function(req,res){
     res.render("admin-gunsonu");
 });
 
-router.get("/admin/urunayarlari", async function(req, res) {
+//ADMIN URUN AYARLARI
+router.get("/admin/urunayarlari", adminAuth, async function(req, res) {
     try {
         
          const [urunler] = await db.execute(`
@@ -122,7 +327,7 @@ router.get("/admin/urunayarlari", async function(req, res) {
 
 
 
-router.post("/admin/urunayarlari", imageUpload.upload.single("resim") ,async function (req,res){
+router.post("/admin/urunayarlari", adminAuth, imageUpload.upload.single("resim") ,async function (req,res){
     const urunAd = req.body.urunAd;
     const kategori = req.body.kategori;
     const fiyat = req.body.fiyat;
@@ -140,7 +345,7 @@ router.post("/admin/urunayarlari", imageUpload.upload.single("resim") ,async fun
     }
 });
 
-router.delete("/admin/urunayarlari/sil/:id", async function(req, res) {
+router.delete("/admin/urunayarlari/sil/:id", adminAuth, async function(req, res) {
     const urunId = req.params.id;
     try {
         await db.query("DELETE FROM urunler WHERE urunid = ?", [urunId]);
@@ -151,7 +356,7 @@ router.delete("/admin/urunayarlari/sil/:id", async function(req, res) {
     }
 });
 
-router.post("/admin/urunayarlari/guncelle/:id", imageUpload.upload.single("resim"), async function(req, res) {
+router.post("/admin/urunayarlari/guncelle/:id", adminAuth, imageUpload.upload.single("resim"), async function(req, res) {
     const urunId = req.params.id;
     const { urunAd, fiyat, kategori } = req.body;
 
@@ -178,8 +383,6 @@ router.post("/admin/urunayarlari/guncelle/:id", imageUpload.upload.single("resim
 
 
 
-router.get("/admin", function(req,res){
-    res.render("admin");
-});
+
 
 module.exports = router ;

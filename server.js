@@ -1,9 +1,12 @@
 const express = require("express");
-
 const app = express();
 const path = require("path");
 app.use(express.static("public"));
 const db = require("./data/db");
+const sessionConfig = require("./session-config");
+
+app.use(sessionConfig);
+
 
 app.set("view engine", "ejs");
 app.set("views", "public/views");
@@ -18,10 +21,6 @@ const adminRoutes = require("./Routes/admin");
 
 app.use(adminRoutes);
 app.use(userRoutes);
-
-
-
-
 
 
 app.listen(3000, function(){

@@ -1,0 +1,12 @@
+<link rel="stylesheet" href="../css/admin-login-style.css">
+<div class="login-container">
+  <h2>Admin Girişi</h2>
+  <form method="POST" action="/admin/login">
+      <input type="text" name="username" placeholder="Kullanıcı Adı" required>
+      <input type="password" name="password" placeholder="Şifre" required>
+      <button type="submit">Giriş Yap</button>
+      <% if (typeof error !== "undefined") { %>
+          <p style="color:red"><%= error %></p>
+      <% } %>
+  </form>
+</div>
