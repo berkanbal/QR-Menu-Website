@@ -156,6 +156,61 @@ router.get("/admin/siparisler", adminAuth, async (req, res) => {
   }
 });
 
+//Otomatik Sipariş Kontrolü
+// Yeni siparişleri getiren API
+router.get('/admin/api/yeni-siparisler', adminAuth, async (req, res) => {
+  try {
+    const sonId = parseInt(req.query.son_id) || 0;
+
+    // Siparişler ve ürünlerini al (aynı şekilde gruplayacağız)
+    const [rows] = await db.execute(`
+      SELECT 
+        s.siparis_id,
+        s.tarih,
+        s.masa_no,
+        CAST(s.toplam_fiyat AS DECIMAL(10,2)) as toplam_fiyat,
+        s.durum,
+        sd.adet,
+        u.urunAd as urun_ad
+      FROM siparisler s
+      JOIN siparis_detaylari sd ON s.siparis_id = sd.siparis_id
+      JOIN urunler u ON sd.urun_id = u.urunid
+      WHERE s.siparis_id > ?
+      ORDER BY s.siparis_id ASC
+    `, [sonId]);
+
+    // Siparişleri grupla (aynı senin kullandığın gibi)
+    const siparisler = rows.reduce((acc, row) => {
+      const existing = acc.find(s => s.siparis_id === row.siparis_id);
+      if (existing) {
+        existing.urunler.push({
+          urun_ad: row.urun_ad,
+          adet: row.adet
+        });
+      } else {
+        acc.push({
+          siparis_id: row.siparis_id,
+          tarih: row.tarih,
+          masa_no: row.masa_no,
+          toplam_fiyat: Number(row.toplam_fiyat),
+          durum: row.durum,
+          urunler: [{
+            urun_ad: row.urun_ad,
+            adet: row.adet
+          }]
+        });
+      }
+      return acc;
+    }, []);
+
+    res.json(siparisler);
+
+  } catch (err) {
+    console.error("Yeni siparişler alınırken hata:", err);
+    res.status(500).json({ error: "Sunucu hatası" });
+  }
+});
+
 router.post("/admin/siparisler/:id/durum-guncelle", adminAuth, async (req, res) => {
   try {
     const siparisId = parseInt(req.params.id);
